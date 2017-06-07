@@ -1,0 +1,10 @@
+li {
+  list-style: none;
+  background-color: white;
+}
+
+li>button {
+  border: 2px solid LightBlue;
+  border-radius: 8px;
+  float: right;
+}

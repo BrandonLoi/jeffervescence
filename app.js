@@ -16,18 +16,41 @@ const app = {
       name: f.flickName.value
     }
     const listItem = this.buildListItem(flick)
-    console.log(listItem)
     this.max++
   },
 
   buildListItem(flick) {
     const item = document.createElement('li')
+    const pButton = document.createElement('button')
+    const dButton = document.createElement('button')
     item.textContent = flick.name
+
+    pButton.innerHTML = 'Promote';
+    dButton.innerHTML = 'Delete'
+    pButton.type = 'button'
+    dButton.type = 'button'
+
+    item.appendChild(dButton)
+    item.appendChild(pButton)
+
+    pButton.addEventListener('click', this.promote)
+    dButton.addEventListener('click', this.del)
+
     this.list.appendChild(item)
-    //TODO: add flick to this.flicks
     flicks.push(item.textContent)
-    console.log(flicks)
     return item
+  },
+  promote(ev) {
+    if(ev.target.parentElement.style.backgroundColor === 'yellow') {
+      ev.target.parentElement.style.backgroundColor = 'white'
+    }
+    else {
+      ev.target.parentElement.style.backgroundColor = 'yellow'
+    }
+  },
+  del(ev) {
+    const element = ev.target.parentElement
+    element.remove()
   },
 }
 
