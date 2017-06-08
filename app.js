@@ -32,14 +32,14 @@ const app = {
     const f = ev.target
     const flick = {
       id: this.max + 1,
-      name: f.flickName.value
+      name: f.flickName.value,
+      year: f.flickYear.value
     }
     this.addFlick(flick)
     f.reset()
   },
 
   save() {
-    console.log(this.flicks)
     localStorage.setItem('flicks', JSON.stringify(this.flicks))
   },
 
@@ -47,7 +47,7 @@ const app = {
     const item = this.template.cloneNode(true)
     item.classList.remove('template')
     item.dataset.id = flick.id
-    item.querySelector('.flick-name').textContent = flick.name
+    item.querySelector('.flick-name').textContent = flick.name + ' - ' + flick.year
     item.querySelector('.button.remove').addEventListener('click', this.removeFlick.bind(this))
     return item
   },
