@@ -38,7 +38,8 @@ const app = {
     pButton.addEventListener('click', this.promote)
     dButton.addEventListener('click', this.del)
 
-    this.list.appendChild(item)
+    //this.list.appendChild(item)
+    this.list.insertBefore(item, this.list.firstChild)
     flicks.push(flick.name)
     return item
   },
