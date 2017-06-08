@@ -1,25 +1,41 @@
 const app = {
-    init(selectors) {
+  init(selectors) {
     this.flicks = []
     this.max = 0
     this.list = document.querySelector(selectors.listSelector)
-    document
-    .querySelector(selectors.formSelector)
-    .addEventListener('submit', this.addFlick.bind(this))
+    document.querySelector(selectors.formSelector).addEventListener('submit', this.addFlickViaForm.bind(this))
     this.template = document.querySelector(selectors.templateSelector)
-
+    this.load()
   },
-
-  addFlick(ev) {
+  load() {
+    //Get the JSON string out of localStorage
+    const flicksJSON = localStorage.getItem('flicks')
+    //Turn that into an array
+    const flicksArray = JSON.parse(flicksJSON)
+    //Set this.flicks to that array
+    if (flicksArray) {
+      flicksArray.reverse().map(this.addFlick.bind(this))
+    }
+  },
+  addFlick(flick) {
+    const listItem = this.buildListItem(flick)
+    this.list.insertBefore(listItem, this.list.firstChild)
+    this.max++
+      this.flicks.unshift(flick)
+    this.save()
+  },
+  addFlickViaForm(ev) {
     ev.preventDefault()
     const f = ev.target
     const flick = {
       id: this.max + 1,
       name: f.flickName.value
     }
-    const listItem = this.buildListItem(flick)
-    this.max++
+    this.addFlick(flick)
     f.reset()
+  },
+  save() {
+    localStorage.setItem('flicks', JSON.stringify(this.flicks))
   },
 
   buildListItem(flick) {
@@ -28,30 +44,20 @@ const app = {
     item.dataset.id = flick.id
     item.querySelector('.flick-name').textContent = flick.name
     item.querySelector('.button.remove').addEventListener('click', this.removeFlick.bind(this))
-    this.list.insertBefore(item, this.list.firstChild)
-    this.flicks.unshift(flick)
     return item
   },
-  promote(ev) {
-    if(ev.target.parentElement.style.backgroundColor === 'yellow') {
-      ev.target.parentElement.style.backgroundColor = 'white'
-    }
-    else {
-      ev.target.parentElement.style.backgroundColor = 'yellow'
-    }
-  },
   removeFlick(ev) {
-    console.log(this)
     const listItem = ev.target.closest('.flick')
     //find flick in array
     for (let i = 0; i < this.flicks.length; i++) {
       if (this.flicks[i].id === listItem.dataset.id.toString()) {
-        this.flicks.splice(i,1);
+        this.flicks.splice(i, 1);
         break;
       }
     }
 
     listItem.remove()
+    this.save()
   },
 }
 
