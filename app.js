@@ -1,6 +1,6 @@
 const app = {
     init(selectors) {
-    flicks = []
+    this.flicks = []
     this.max = 0
     this.list = document.querySelector(selectors.listSelector)
     document
@@ -27,9 +27,9 @@ const app = {
     item.classList.remove('template')
     item.dataset.id = flick.id
     item.querySelector('.flick-name').textContent = flick.name
-    item.querySelector('.button.remove').addEventListener('click', this.removeFlick)
+    item.querySelector('.button.remove').addEventListener('click', this.removeFlick.bind(this))
     this.list.insertBefore(item, this.list.firstChild)
-    flicks.unshift(flick.name)
+    this.flicks.unshift(flick)
     return item
   },
   promote(ev) {
@@ -41,14 +41,17 @@ const app = {
     }
   },
   removeFlick(ev) {
+    console.log(this)
     const listItem = ev.target.closest('.flick')
-    listItem.remove
-    // const element = ev.target.parentElement
-    // element.remove()
-    // const index = flicks.indexOf(ev.target.parentElement.textContent.substring(0, ev.target.parentElement.textContent.length - 13));
-    // if (index > -1) {
-    //   flicks.splice(index, 1)
-    //   }
+    //find flick in array
+    for (let i = 0; i < this.flicks.length; i++) {
+      if (this.flicks[i].id === listItem.dataset.id.toString()) {
+        this.flicks.splice(i,1);
+        break;
+      }
+    }
+
+    listItem.remove()
   },
 }
 
