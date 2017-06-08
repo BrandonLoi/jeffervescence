@@ -6,6 +6,7 @@ const app = {
     document
     .querySelector(selectors.formSelector)
     .addEventListener('submit', this.addFlick.bind(this))
+
   },
 
   addFlick(ev) {
@@ -25,7 +26,7 @@ const app = {
     const pButton = document.createElement('button')
     const dButton = document.createElement('button')
     item.textContent = flick.name
-
+    item.dataset.id = flick.id
     pButton.innerHTML = 'Promote';
     dButton.innerHTML = 'Delete'
     pButton.type = 'button'
