@@ -6,6 +6,7 @@ const app = {
     document
     .querySelector(selectors.formSelector)
     .addEventListener('submit', this.addFlick.bind(this))
+    this.template = document.querySelector(selectors.templateSelector)
 
   },
 
@@ -22,21 +23,22 @@ const app = {
   },
 
   buildListItem(flick) {
-    const item = document.createElement('li')
-    const pButton = document.createElement('button')
-    const dButton = document.createElement('button')
-    item.textContent = flick.name
+    const item = this.template.cloneNode(true)
+    item.classList.remove('template')
     item.dataset.id = flick.id
-    pButton.innerHTML = 'Promote';
-    dButton.innerHTML = 'Delete'
-    pButton.type = 'button'
-    dButton.type = 'button'
+    item.querySelector('.flick-name').textContent = flick.name
+    // const pButton = document.createElement('button')
+    // const dButton = document.createElement('button')
+    // pButton.innerHTML = 'Promote';
+    // dButton.innerHTML = 'Delete'
+    // pButton.type = 'button'
+    // dButton.type = 'button'
+    //
+    // item.appendChild(dButton)
+    // item.appendChild(pButton)
 
-    item.appendChild(dButton)
-    item.appendChild(pButton)
-
-    pButton.addEventListener('click', this.promote)
-    dButton.addEventListener('click', this.del)
+    // pButton.addEventListener('click', this.promote)
+    // dButton.addEventListener('click', this.del)
 
     //this.list.appendChild(item)
     this.list.insertBefore(item, this.list.firstChild)
@@ -63,5 +65,6 @@ const app = {
 
 app.init({
   formSelector: '#flick-form',
-  listSelector: '#flick-list'
+  listSelector: '#flick-list',
+  templateSelector: '.flick.template',
 })
