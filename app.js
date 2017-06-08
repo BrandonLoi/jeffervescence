@@ -7,6 +7,7 @@ const app = {
     this.template = document.querySelector(selectors.templateSelector)
     this.load()
   },
+
   load() {
     //Get the JSON string out of localStorage
     const flicksJSON = localStorage.getItem('flicks')
@@ -17,6 +18,7 @@ const app = {
       flicksArray.reverse().map(this.addFlick.bind(this))
     }
   },
+
   addFlick(flick) {
     const listItem = this.buildListItem(flick)
     this.list.insertBefore(listItem, this.list.firstChild)
@@ -24,6 +26,7 @@ const app = {
       this.flicks.unshift(flick)
     this.save()
   },
+
   addFlickViaForm(ev) {
     ev.preventDefault()
     const f = ev.target
@@ -34,7 +37,9 @@ const app = {
     this.addFlick(flick)
     f.reset()
   },
+
   save() {
+    console.log(this.flicks)
     localStorage.setItem('flicks', JSON.stringify(this.flicks))
   },
 
@@ -46,11 +51,13 @@ const app = {
     item.querySelector('.button.remove').addEventListener('click', this.removeFlick.bind(this))
     return item
   },
+
   removeFlick(ev) {
     const listItem = ev.target.closest('.flick')
     //find flick in array
     for (let i = 0; i < this.flicks.length; i++) {
-      if (this.flicks[i].id === listItem.dataset.id.toString()) {
+      debugger
+      if (this.flicks[i].id.toString() === listItem.dataset.id.toString()) {
         this.flicks.splice(i, 1);
         break;
       }
