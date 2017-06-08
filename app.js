@@ -37,7 +37,7 @@ const app = {
     dButton.addEventListener('click', this.del)
 
     this.list.appendChild(item)
-    flicks.push(item.textContent)
+    flicks.push(flick.name)
     return item
   },
   promote(ev) {
@@ -51,6 +51,10 @@ const app = {
   del(ev) {
     const element = ev.target.parentElement
     element.remove()
+    const index = flicks.indexOf(ev.target.parentElement.textContent.substring(0, ev.target.parentElement.textContent.length - 13));
+    if (index > -1) {
+      flicks.splice(index, 1)
+      }
   },
 }
 
