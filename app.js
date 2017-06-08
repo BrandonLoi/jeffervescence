@@ -40,7 +40,7 @@ const app = {
 
     //this.list.appendChild(item)
     this.list.insertBefore(item, this.list.firstChild)
-    flicks.push(flick.name)
+    flicks.unshift(flick.name)
     return item
   },
   promote(ev) {
