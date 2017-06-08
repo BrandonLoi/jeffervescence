@@ -17,6 +17,7 @@ const app = {
     }
     const listItem = this.buildListItem(flick)
     this.max++
+    f.reset()
   },
 
   buildListItem(flick) {
