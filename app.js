@@ -27,20 +27,7 @@ const app = {
     item.classList.remove('template')
     item.dataset.id = flick.id
     item.querySelector('.flick-name').textContent = flick.name
-    // const pButton = document.createElement('button')
-    // const dButton = document.createElement('button')
-    // pButton.innerHTML = 'Promote';
-    // dButton.innerHTML = 'Delete'
-    // pButton.type = 'button'
-    // dButton.type = 'button'
-    //
-    // item.appendChild(dButton)
-    // item.appendChild(pButton)
-
-    // pButton.addEventListener('click', this.promote)
-    // dButton.addEventListener('click', this.del)
-
-    //this.list.appendChild(item)
+    item.querySelector('.button.remove').addEventListener('click', this.removeFlick)
     this.list.insertBefore(item, this.list.firstChild)
     flicks.unshift(flick.name)
     return item
@@ -53,13 +40,15 @@ const app = {
       ev.target.parentElement.style.backgroundColor = 'yellow'
     }
   },
-  del(ev) {
-    const element = ev.target.parentElement
-    element.remove()
-    const index = flicks.indexOf(ev.target.parentElement.textContent.substring(0, ev.target.parentElement.textContent.length - 13));
-    if (index > -1) {
-      flicks.splice(index, 1)
-      }
+  removeFlick(ev) {
+    const listItem = ev.target.closest('.flick')
+    listItem.remove
+    // const element = ev.target.parentElement
+    // element.remove()
+    // const index = flicks.indexOf(ev.target.parentElement.textContent.substring(0, ev.target.parentElement.textContent.length - 13));
+    // if (index > -1) {
+    //   flicks.splice(index, 1)
+    //   }
   },
 }
 
