@@ -34,8 +34,8 @@ li>button {
 }
 
 .flick.fav {
-  background-color: #ffa807;
-  border-color: #ffc656;
+  background-color: #ffc656;
+  border-color: #ffa807;
 }
 
 .flick:first-child button.move-up, .flick:last-child button.move-down {

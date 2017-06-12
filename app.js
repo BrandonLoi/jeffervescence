@@ -33,7 +33,6 @@ const app = {
     const flick = {
       id: this.max + 1,
       name: f.flickName.value,
-      year: f.flickYear.value
     }
     fav: false
     this.addFlick(flick)
@@ -48,11 +47,14 @@ const app = {
     const item = this.template.cloneNode(true)
     item.classList.remove('template')
     item.dataset.id = flick.id
-    item.querySelector('.flick-name').textContent = flick.name + ' - ' + flick.year
+    item.querySelector('.flick-name').textContent = flick.name
+    item.querySelector('.flick-name').addEventListener('keypress', this.saveOnEnter.bind(this, flick))
     item.querySelector('.button.remove').addEventListener('click', this.removeFlick.bind(this))
     item.querySelector('.button.fav').addEventListener('click', this.favFlick.bind(this, flick))
     item.querySelector('.button.move-up').addEventListener('click', this.moveUp.bind(this, flick))
     item.querySelector('.button.move-down').addEventListener('click', this.moveDown.bind(this, flick))
+    item.querySelector('.button.edit').addEventListener('click', this.edit.bind(this, flick))
+
     if (flick.fav) {
       item.classList.add('fav')
     }
@@ -107,6 +109,36 @@ const app = {
     }
   },
 
+  edit(flick, ev) {
+    const listItem = ev.target.closest('.flick')
+    const nameField = listItem.querySelector('.flick-name')
+    const btn = listItem.querySelector('.edit.button')
+
+    const icon = btn.querySelector('i.fa')
+
+    if (nameField.isContentEditable) {
+      // make it no longer editable
+      nameField.contentEditable = false
+      icon.classList.remove('fa-check')
+      icon.classList.add('fa-pencil')
+      btn.classList.remove('success')
+
+      // save changes
+      flick.name = nameField.textContent
+      this.save()
+    } else {
+      nameField.contentEditable = true
+      nameField.focus()
+      icon.classList.remove('fa-pencil')
+      icon.classList.add('fa-check')
+      btn.classList.add('success')
+    }
+  },
+  saveOnEnter(flick, ev) {
+    if (ev.key === 'Enter') {
+      this.edit(flick, ev)
+    }
+  },
 }
 app.init({
   formSelector: '#flick-form',
