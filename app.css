@@ -6,9 +6,28 @@ li {
 li>button {
   border: 2px solid LightBlue;
   border-radius: 8px;
-  float: right;
 }
 
 .template {
   visibility: hidden;
+}
+
+.flick {
+  border: 1px solid #ddd;
+  clear: both;
+  display: flex;
+  align-items: center;
+  padding: .75rem 1.25rem;
+}
+
+.flick+.flick {
+  border-top: 0px;
+}
+
+.flick-name {
+  flex-grow: 1;
+}
+
+.actions.button-group {
+  margin-bottom: 0;
 }
