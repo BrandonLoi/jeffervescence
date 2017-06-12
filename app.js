@@ -61,7 +61,6 @@ const app = {
     const listItem = ev.target.closest('.flick')
     //find flick in array
     for (let i = 0; i < this.flicks.length; i++) {
-      debugger
       if (this.flicks[i].id.toString() === listItem.dataset.id.toString()) {
         this.flicks.splice(i, 1);
         break;
