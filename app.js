@@ -20,7 +20,7 @@
    }
 
    addFlick(flick) {
-     const listItem = this.buildListItem(flick)
+     const listItem = this.renderListItem(flick)
      this.list.insertBefore(listItem, this.list.firstChild)
        ++this.max
      if (flick.id > this.max) {
@@ -46,48 +46,56 @@
      localStorage.setItem('flicks', JSON.stringify(this.flicks))
    }
 
-   buildListItem(flick) {
+   renderListItem(flick) {
      const item = this.template.cloneNode(true)
      item.classList.remove('template')
      item.dataset.id = flick.id
      item.querySelector('.flick-name').textContent = flick.name
-     item.querySelector('.flick-name').addEventListener('keypress', this.saveOnEnter.bind(this, flick))
-     item.querySelector('.button.remove').addEventListener('click', this.removeFlick.bind(this))
-     item.querySelector('.button.fav').addEventListener('click', this.favFlick.bind(this, flick))
-     item.querySelector('.button.move-up').addEventListener('click', this.moveUp.bind(this, flick))
-     item.querySelector('.button.move-down').addEventListener('click', this.moveDown.bind(this, flick))
-     item.querySelector('.button.edit').addEventListener('click', this.edit.bind(this, flick))
+     item.querySelector('.flick-name').setAttribute('title', flick.name)
 
      if (flick.fav) {
        item.classList.add('fav')
      }
+
+     item.querySelector('.flick-name').addEventListener('keypress', this.saveOnEnter.bind(this, flick))
+     item.querySelector('button.remove').addEventListener('click', this.removeFlick.bind(this))
+     item.querySelector('button.fav').addEventListener('click', this.favFlick.bind(this, flick))
+     item.querySelector('button.move-up').addEventListener('click', this.moveUp.bind(this, flick))
+     item.querySelector('button.move-down').addEventListener('click', this.moveDown.bind(this, flick))
+     item.querySelector('button.edit').addEventListener('click', this.edit.bind(this, flick))
      return item
    }
 
    removeFlick(ev) {
      const listItem = ev.target.closest('.flick')
-     //find flick in array
      for (let i = 0; i < this.flicks.length; i++) {
-       if (this.flicks[i].id.toString() === listItem.dataset.id.toString()) {
-         this.flicks.splice(i, 1);
-         break;
+       const currentId = this.flicks[i].id.toString()
+       if (listItem.dataset.id === currentId) {
+         this.flicks.splice(i, 1)
+         break
        }
      }
-
      listItem.remove()
      this.save()
    }
 
    favFlick(flick, ev) {
      const listItem = ev.target.closest('.flick')
-     listItem.classList.toggle('fav')
      flick.fav = !flick.fav
+
+     if (flick.fav) {
+       listItem.classList.add('fav')
+     } else {
+       listItem.classList.remove('fav')
+     }
+
      this.save()
    }
 
+
    moveUp(flick, ev) {
      const listItem = ev.target.closest('.flick')
-     const index = this.flicks.findIndex((currentFlick) => {
+     const index = this.flicks.findIndex((currentFlick, i) => {
        return currentFlick.id === flick.id
      })
      if (index > 0) {
@@ -95,12 +103,12 @@
        const previousFlick = this.flicks[index - 1]
        this.flicks[index - 1] = flick
        this.flicks[index] = previousFlick
-       this.save
+       this.save()
      }
    }
    moveDown(flick, ev) {
      const listItem = ev.target.closest('.flick')
-     const index = this.flicks.findIndex((currentFlick) => {
+     const index = this.flicks.findIndex((currentFlick, i) => {
        return currentFlick.id === flick.id
      })
      if (index < this.flicks.length - 1) {
@@ -143,9 +151,9 @@
      }
    }
  }
+
  const app = new App({
    formSelector: '#flick-form',
    listSelector: '#flick-list',
    templateSelector: '.flick.template',
-
  })
