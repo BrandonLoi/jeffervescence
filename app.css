@@ -31,3 +31,8 @@ li>button {
 .actions.button-group {
   margin-bottom: 0;
 }
+
+.flick.fav {
+  background-color: #ffa807;
+  border-color: #ffc656;
+}
