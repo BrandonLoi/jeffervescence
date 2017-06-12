@@ -51,6 +51,7 @@ const app = {
     item.querySelector('.flick-name').textContent = flick.name + ' - ' + flick.year
     item.querySelector('.button.remove').addEventListener('click', this.removeFlick.bind(this))
     item.querySelector('.button.fav').addEventListener('click', this.favFlick.bind(this, flick))
+    item.querySelector('.button.move-up').addEventListener('click', this.moveUp.bind(this, flick))
     if (flick.fav) {
       item.classList.add('fav')
     }
@@ -70,14 +71,28 @@ const app = {
     listItem.remove()
     this.save()
   },
+
   favFlick(flick, ev) {
     const listItem = ev.target.closest('.flick')
     listItem.classList.toggle('fav')
     flick.fav = !flick.fav
     this.save()
+  },
+
+  moveUp(flick, ev) {
+    const listItem = ev.target.closest('.flick')
+    const index = this.flicks.findIndex((currentFlick) => {
+      return currentFlick.id === flick.id
+    })
+    if (index > 0) {
+      this.list.insertBefore(listItem, listItem.previousElementSibling)
+      const previousFlick = this.flicks[index - 1]
+      this.flicks[index - 1] = flick
+      this.flicks[index] = previousFlick
+      this.save
+    }
   }
 }
-
 app.init({
   formSelector: '#flick-form',
   listSelector: '#flick-list',
