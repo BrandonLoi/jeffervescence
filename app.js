@@ -1,10 +1,12 @@
  class App {
    constructor(selectors) {
      this.flicks = []
+     this.dates = []
      this.max = 0
      this.list = document.querySelector(selectors.listSelector)
      document.querySelector(selectors.formSelector).addEventListener('submit', this.addFlickViaForm.bind(this))
      this.template = document.querySelector(selectors.templateSelector)
+     this.datelist = document.querySelector(selectors.dateSelector)
      this.load()
    }
 
@@ -17,8 +19,13 @@
      if (flicksArray) {
        flicksArray.reverse().map(this.addFlick.bind(this))
      }
-   }
 
+     const dateJSON = localStorage.getItem('dates')
+     const dateArray = JSON.parse(dateJSON)
+     if (dateArray) {
+       this.dates = dateArray
+     }
+   }
    addFlick(flick) {
      const listItem = this.renderListItem(flick)
      this.list.insertBefore(listItem, this.list.firstChild)
@@ -27,6 +34,23 @@
        this.max = flick.id
      }
      this.flicks.unshift(flick)
+     if (this.dates.length != 0) {
+       let i
+       for (i = 0; i < this.dates.length; i++) {
+         if (this.dates[i].year > flick.year) {
+           break
+         }
+       }
+       this.dates.splice(i, 0, flick)
+     } else {
+       this.dates.push(flick)
+     }
+     while (this.datelist.hasChildNodes()) {
+       this.datelist.removeChild(this.datelist.lastChild);
+     }
+     for (var i = 0; i < this.dates.length; i++) {
+       this.datelist.appendChild(this.makeNode(this.dates[i]))
+     }
      this.save()
    }
 
@@ -36,14 +60,17 @@
      const flick = {
        id: this.max + 1,
        name: f.flickName.value,
+       year: f.flickYear.value
      }
      fav: false
      this.addFlick(flick)
      f.reset()
    }
 
+
    save() {
      localStorage.setItem('flicks', JSON.stringify(this.flicks))
+     localStorage.setItem('dates', JSON.stringify(this.dates))
    }
 
    renderListItem(flick) {
@@ -56,7 +83,6 @@
      if (flick.fav) {
        item.classList.add('fav')
      }
-
      item.querySelector('.flick-name').addEventListener('keypress', this.saveOnEnter.bind(this, flick))
      item.querySelector('button.remove').addEventListener('click', this.removeFlick.bind(this))
      item.querySelector('button.fav').addEventListener('click', this.favFlick.bind(this, flick))
@@ -75,6 +101,14 @@
          break
        }
      }
+     for (let i = 0; i < this.dates.length; i++) {
+       const currentId = this.dates[i].id.toString()
+       if (listItem.dataset.id === currentId) {
+         this.dates.splice(i, 1)
+         break
+       }
+     }
+
      listItem.remove()
      this.save()
    }
@@ -145,6 +179,12 @@
        btn.classList.add('success')
      }
    }
+   makeNode(flick) {
+     const item = document.createElement('li')
+     const text = document.createTextNode(flick.name + ' - ' + flick.year)
+     item.appendChild(text)
+     return item
+   }
    saveOnEnter(flick, ev) {
      if (ev.key === 'Enter') {
        this.edit(flick, ev)
@@ -155,5 +195,6 @@
  const app = new App({
    formSelector: '#flick-form',
    listSelector: '#flick-list',
+   dateSelector: '#date-list',
    templateSelector: '.flick.template',
  })
